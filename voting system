@@ -1,0 +1,91 @@
+#include <stdio.h>
+
+// Function to display the menu and get user choice
+int displayMenu() {
+    int choice;
+    printf("\n===== Voting System =====\n");
+    printf("1. Vote for Roy\n");
+    printf("2. Vote for Ash\n");
+    printf("3. Vote for Pablo\n");
+    printf("4. Display Results\n");
+    printf("5. Exit\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+    return choice;
+}
+
+// Function to record votes for candidates and check for a winner
+int vote(int candidateVotes[], int candidate) {
+    const char *candidateNames[] = {"Roy", "Ash", "Pablo"};
+    candidateVotes[candidate - 1]++;
+    printf("Vote recorded for Candidate %s\n", candidateNames[candidate - 1]);
+
+    // Check if a candidate has reached 10 votes
+    if (candidateVotes[candidate - 1] >= 10) {
+        printf("Congratulations! Candidate %s has reached 10 votes and is the winner!\n", candidateNames[candidate - 1]);
+        return 1; // Indicates that a winner is found
+    }
+
+    return 0; // No winner yet
+}
+
+// Function to display the results
+void displayResults(int candidateVotes[]) {
+    const char *candidateNames[] = {"Roy", "Ash", "Pablo"};
+    printf("\n===== Election Results =====\n");
+    for (int i = 0; i < 3; ++i) {
+        printf("Candidate %s: %d votes\n", candidateNames[i], candidateVotes[i]);
+    }
+}
+
+int main() {
+    int candidateVotes[3] = {0}; // Array to store votes for each candidate
+    int age, choice;
+    char firstName[50], lastName[50], address[100];
+    int winnerFound = 0;
+
+    // Ask for the voter's first name, last name, and address
+    printf("Enter your first name: ");
+    scanf("%s", firstName);
+
+    printf("Enter your last name: ");
+    scanf("%s", lastName);
+
+    printf("Enter your address: ");
+    scanf(" %[^\n]s", address);  // %[^\n]s allows reading spaces until a newline character
+
+    // Ask for the voter's age
+    do {
+        printf("Enter your age: ");
+        scanf("%d", &age);
+
+        if (age < 18) {
+            printf("You must be 18 or above to vote. Please enter a valid age.\n");
+        }
+
+    } while (age < 18);
+
+    // Main menu loop
+    do {
+        choice = displayMenu();
+
+        switch (choice) {
+            case 1:
+            case 2:
+            case 3:
+                winnerFound = vote(candidateVotes, choice);
+                break;
+            case 4:
+                displayResults(candidateVotes);
+                break;
+            case 5:
+                printf("Exiting the program.\n");
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+
+    } while (choice != 5 && !winnerFound);
+
+    return 0;
+}
